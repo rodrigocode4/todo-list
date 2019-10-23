@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
@@ -12,6 +12,15 @@ const Todo = (props) => {
 
     const [state, setState] = useState({ description: '', list: [] })
 
+    useEffect(() => {
+        refresh()
+    }, [])
+
+    function refresh() {
+        axios.get(`${URL}?sort=-createdAt`)
+            .then(resp => setState({ ...state, description: '', list: resp.data }))
+    }
+
     function handleChange(e) {
         setState({ ...state, description: e.target.value })
     }
@@ -19,7 +28,13 @@ const Todo = (props) => {
     function handleAdd() {
         console.log('Add')
         let description = state.description;
-        axios.post(URL, { description }).then( (resp) => 'Funcionou!!!!!')
+        axios.post(URL, { description })
+            .then(resp => refresh())
+    }
+
+    function handleRemove(todo) {
+        axios.delete(`${URL}/${todo._id}`)
+            .then(resp => refresh())
     }
 
     return (
@@ -29,7 +44,9 @@ const Todo = (props) => {
                 description={state.description}
                 handleChange={handleChange}
                 handleAdd={handleAdd} />
-            <TodoList />
+            <TodoList 
+                list={state.list}
+                handleRemove={handleRemove} />
         </>
     );
 }

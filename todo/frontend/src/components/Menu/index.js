@@ -7,7 +7,7 @@ const Menu = (props) => {
                 <Link className="navbar-brand" to="/">
                     <i className="fa fa-calendar-check-o"></i> TodoRS
                 </Link>
-                <div lassName="collapse navbar-collapse ">
+                <div className="collapse navbar-collapse ">
                     <div className="nav">
                         <ul className="navbar-nav">
                             <li className="nav-item">
